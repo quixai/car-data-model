@@ -13,8 +13,8 @@ Each instance of the model can process multiple streams. Quix SDK is designed to
 ```python
 # Callback called for each incoming stream
 def read_stream(new_stream: StreamReader):
-  # Here you react to each incoming stream individually.
-
+  # Inside this method you react to each incoming stream individually.
+  return
 
 # Hook up events before initiating read to avoid losing out on any data
 input_topic.on_stream_received += read_stream
