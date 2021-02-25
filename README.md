@@ -1,7 +1,7 @@
 # Car data example model
 Example code how to build simple in-memory function using Quix SDK on real-time data. The architecture is following:
  
-[![](car-demo-model.svg)](car-demo-model.svg "Visualize in Quix") 
+[![](car-demo-model.svg)](car-demo-model.svg "Architecture") 
 
 1) Car telemetry is streamed into input topic.
 2) Model is subscribed to input topic and is reading data realtime into memory.
@@ -58,3 +58,7 @@ buffer.on_read += on_parameter_data_handler
 ## Result
 **If persistence is enabled**, car data and result of this function is persisted. You can review output of the funtion in data catalogue.
 
+[![](model-catalogue.png)](model-catalogue.png "Model in data catalogue")
+
+
+[![](model-parameters.png)](model-parameters.png "Model parameters in parameter browser")
