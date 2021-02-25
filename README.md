@@ -56,7 +56,7 @@ buffer.on_read += on_parameter_data_handler
 ```
 
 ## Result
-**If persistence is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
+**If persistence on topics is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
 
 [![](model-catalogue.png)](model-catalogue.png "Model in data catalogue")
 
