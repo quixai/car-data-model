@@ -3,17 +3,17 @@ Example code how to build simple in-memory function using Quix SDK on real-time 
  
 [![](car-demo-model.svg)](car-demo-model.svg "Architecture") 
 
-1) Car telemetry is streamed into input topic.
+1) Car telemetry is streamed into the input topic.
 2) Model is subscribed to input topic and is reading data realtime into memory.
 3) Result of model function is streamed to output topic
 
-## Code walkthrow 
+## Code walkthrough 
 
-Each instance of model can proccess multiple streams. Quix SDK is designed to help you to react to each incoming stream in it's own scope. 
+Each instance of the model can process multiple streams. Quix SDK is designed to help you to react to each incoming stream in its scope. 
 ```python
 # Callback called for each incoming stream
 def read_stream(new_stream: StreamReader):
-  # Here you react to each incoming stream invidually.
+  # Here you react to each incoming stream individually.
 
 
 # Hook up events before initiating read to avoid losing out on any data
@@ -21,7 +21,7 @@ input_topic.on_stream_received += read_stream
 input_topic.start_reading()  # initiate read
 ```
 
-In this case we will create for each incoming stream one output stream with result of our function. We also atach new stream as child of input stream to persist data lineage. 
+In this case, we will create for each incoming stream one output stream with the result of our function. We also attach the new stream as a child of the input stream to persist data lineage. 
 
 ```python
 # Create a new stream to output data
@@ -56,9 +56,12 @@ buffer.on_read += on_parameter_data_handler
 ```
 
 ## Result
-**If persistence is enabled**, car data and result of this function is persisted. You can review output of the funtion in data catalogue.
+**If persistence is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
 
 [![](model-catalogue.png)](model-catalogue.png "Model in data catalogue")
 
 
 [![](model-parameters.png)](model-parameters.png "Model parameters in parameter browser")
+
+## What next
+You can build a dashboard to visualize your data and share it with your others. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
