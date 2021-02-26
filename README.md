@@ -64,6 +64,5 @@ See complete code example in [source/main.py](source/main.py).
 
 
 [![](model-parameters.png)](model-parameters.png "Model parameters in parameter browser")
-
 ## What next
 You can build a dashboard to visualize your data and share it with your others. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
