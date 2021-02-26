@@ -5,12 +5,12 @@ import signal
 import pandas as pd
 
 # Create a client. Client helps you to create input reader or output writer for specified topic.
-security = SecurityOptions('../certificates/ca.cert', "quix-portalanalytics", "tQIyFPbOvgxkWJCNuRVEDiwIWDh6VXTka0X")
+security = SecurityOptions('../certificates/ca.cert', "<USERNAME>", "<PASSWORD>")
 client = StreamingClient('kafka-k1.quix.ai:9093,kafka-k2.quix.ai:9093,kafka-k3.quix.ai:9093', security)
 
 # Change consumer group if you want to run model locally to different constant.
-input_topic = client.open_input_topic('quix-portalanalytics-raw', "default-consumer-group")
-output_topic = client.open_output_topic('quix-portalanalytics-user-sessions')
+input_topic = client.open_input_topic('<INPUT-TOPIC-ID>', "default-consumer-group")
+output_topic = client.open_output_topic('<OUTPUT-TOPIC-ID>')
 
 
 # Callback called for each incoming stream
