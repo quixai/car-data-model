@@ -55,6 +55,8 @@ def on_parameter_data_handler(data: ParameterData):
 buffer.on_read += on_parameter_data_handler
 ```
 
+See complete code example in [source/main.py](source/main.py).
+
 ## Result
 **If persistence on topics is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
 
