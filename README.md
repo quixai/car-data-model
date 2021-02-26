@@ -1,7 +1,7 @@
 # Car data example model
 Example code how to build simple in-memory function using Quix SDK on real-time data. The architecture is following:
  
-[![](car-demo-model.svg)](car-demo-model.svg "Architecture") 
+[![](doc/car-demo-model.svg)](doc/car-demo-model.svg "Architecture") 
 
 1) Car telemetry is streamed into the input topic.
 2) Model is subscribed to input topic and is reading data realtime into memory.
@@ -60,9 +60,10 @@ See complete code example in [source/main.py](source/main.py).
 ## Result
 **If persistence on topics is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
 
-[![](model-catalogue.png)](model-catalogue.png "Model in data catalogue")
+[![](doc/model-catalogue.png)](doc/model-catalogue.png "Model in data catalogue")
 
 
-[![](model-parameters.png)](model-parameters.png "Model parameters in parameter browser")
+[![](doc/model-parameters.png)](doc/model-parameters.png "Model parameters in parameter browser")
+
 ## What next
 You can build a dashboard to visualize your data and share it with your others. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
