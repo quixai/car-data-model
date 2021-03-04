@@ -65,5 +65,8 @@ See complete code example in [source/main.py](source/main.py).
 
 [![](doc/model-parameters.png)](doc/model-parameters.png "Model parameters in parameter browser")
 
+## Deployment
+This model can run locally or in Quix serverless environment. How to deploy service in Quix please see our [doc](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/deploy/).
+
 ## What next
 You can build a dashboard to visualize your data and share it with your others. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
