@@ -28,16 +28,18 @@ def read_stream(new_stream: StreamReader):
     def on_parameter_data_handler(data: ParameterData):
 
         df = data.to_panda_frame()  # Input data frame
-        output_df = pd.DataFrame()
-        output_df["time"] = df["time"]
+        output_df = pd.DataFrame() # Create new data frame for function outputs. 
+        output_df["time"] = df["time"] # Copy time column from input to output frame.
 
+        # Copy lap number column to output as well.
         output_df["TAG__LapNumber"] = df["TAG__LapNumber"]
         print(df)
 
-        # If braking force applied is more than 50%, we send True.  
+        # Calculate when braking force > 50% and send True as an output.
         output_df["HardBraking"] = df.apply(lambda row: "True" if row.Brake > 0.5 else "False", axis=1)  
 
-        stream_writer.parameters.buffer.write(output_df)  # Send filtered data to output topic
+        # Send filtered data to output topic
+        stream_writer.parameters.buffer.write(output_df)  
 
 
     # React to new data received from input topic.
