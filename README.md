@@ -1,15 +1,18 @@
-# Car data example model
-Example code how to build simple in-memory function using Quix SDK on real-time data. The architecture is following:
+# Example model
+This is an example of how to build a simple in-memory function that will continuously process live data. We will use the Quix SDK and a pub/sub pattern to read data from a Kafka topic to the model, and write the model output back to a new Kafka topic.
  
 [![](doc/car-demo-model.svg)](doc/car-demo-model.svg "Architecture") 
 
-1) Car telemetry is streamed into the input topic.
-2) Model is subscribed to input topic and is reading data realtime into memory.
-3) Result of model function is streamed to output topic
+1) Raw telemetry data is streamed from a car into the input topic.
+2) The model subscribes to the input topic read the raw data into memory, live.
+3) The results from the model function are streamed to an output topic.
 
 ## Code walkthrough 
 
-Each instance of the model can process multiple streams. Quix SDK is designed to help you to react to each incoming stream in its scope. 
+The Quix SDK is designed to help you react to individual streams coming from multiple individual sources (like cars). 
+
+To process an incoming stream:
+
 ```python
 # Callback called for each incoming stream
 def read_stream(new_stream: StreamReader):
@@ -21,7 +24,7 @@ input_topic.on_stream_received += read_stream
 input_topic.start_reading()  # initiate read
 ```
 
-In this case, we will create for each incoming stream one output stream with the result of our function. We also attach the new stream as a child of the input stream to persist data lineage. 
+In this example we will create one output stream (with the result of our function) for each incoming stream. We will also attach the new stream as a child of the input stream to maintain data lineage. 
 
 ```python
 # Create a new stream to output data
@@ -30,7 +33,10 @@ stream_writer = output_topic.create_stream(new_stream.stream_id + "-hard-braking
 stream_writer.properties.parents.append(new_stream.stream_id)
 ```
 
-To read parameters from incoming stream, create a new buffer. In this example, we listen to data packets with **Brake** parameter.
+In this function, we will listening for data packets with the parameter **Brake** and calculate when the braking force applied exceeds 50%. 
+
+Create a buffer to read **Brake** parameters from the incoming stream. 
+
 ```python
 buffer = new_stream.parameters.create_buffer("Brake")
 buffer.time_span_in_milliseconds = 100  # React to 100ms windows of data.
@@ -45,20 +51,21 @@ def on_parameter_data_handler(data: ParameterData):
     output_df["TAG__LapNumber"] = df["TAG__LapNumber"]
     print(df)
 
-    # If braking force applied is more than 50%, we send True.  
+    # Calculate when braking force > 50% and send True as an output.
     output_df["HardBraking"] = df.apply(lambda row: "True" if row.Brake > 0.5 else "False", axis=1)  
 
-    stream_writer.parameters.buffer.write(output_df)  # Send filtered data to output topic
+    # Send filtered data to output topic
+    stream_writer.parameters.buffer.write(output_df)  
 
 
-# React to new data received from input topic.
+# React to new data received on the input topic.
 buffer.on_read += on_parameter_data_handler
 ```
 
 See complete code example in [source/main.py](source/main.py).
 
 ## Result
-**If persistence on topics is enabled**, car data and the result of the function is persisted. You can review the output of the function in the data catalogue.
+**If persistence on your input and output topics is enabled**, the raw telemetry data and the result of the function will be persisted to the catalogue where you can view all the data together. 
 
 [![](doc/model-catalogue.png)](doc/model-catalogue.png "Model in data catalogue")
 
@@ -66,7 +73,7 @@ See complete code example in [source/main.py](source/main.py).
 [![](doc/model-parameters.png)](doc/model-parameters.png "Model parameters in parameter browser")
 
 ## Deployment
-This model can run locally or in Quix serverless environment. How to deploy service in Quix please see our [doc](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/deploy/).
+This model can run locally or in Quix serverless environment. To learn how to deploy services in Quix please see our [doc](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/deploy/).
 
 ## What next
-You can build a dashboard to visualize your data and share it with your others. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
+You can build a dashboard to visualize and share the raw and processed data. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
