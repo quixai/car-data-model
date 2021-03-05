@@ -1,13 +1,27 @@
 # Example model
-This is an example of how to build a simple in-memory function that will continuously process live data. We will use the Quix SDK and a pub/sub pattern to read data from a Kafka topic to the model, and write the model output back to a new Kafka topic.
+This is an example of how to build a simple in-memory model that will continuously process live data. The model will contain a function to identify when the pressure applied to the brake system exceeds 50% max. 
+
+We will use the Quix SDK and deploy the model using a pub/sub pattern on Kafka. The model will read data from a Kafka topic containing raw data, and write the output of the function to a new Kafka topic.
+
+We'll create the following architecture:
  
 [![](doc/car-demo-model.svg)](doc/car-demo-model.svg "Architecture") 
 
 1) Raw telemetry data is streamed from a car into the input topic.
-2) The model subscribes to the input topic read the raw data into memory, live.
-3) The results from the model function are streamed to an output topic.
+2) The model subscribes to the input topic reads the raw data into memory, live.
+3) The results from the model/function are streamed to an output topic from where they can be consumed by an application.
+
+## What you need
+
+To build this project, you will need:
+* One workspace
+* Two topics labelled 'input topic' and 'output topic'
+* The raw data [car-data-sample](https://github.com/quixai/car-data-sample)
+* One model (follow the connect wizzard: Topics -> Connect -> Python -> Model -> select input & output topics -> Code Preview -> save as project)
 
 ## Code walkthrough 
+
+In your project.
 
 The Quix SDK is designed to help you react to individual streams coming from multiple individual sources (like cars). 
 
@@ -33,9 +47,9 @@ stream_writer = output_topic.create_stream(new_stream.stream_id + "-hard-braking
 stream_writer.properties.parents.append(new_stream.stream_id)
 ```
 
-In this function, we will listening for data packets with the parameter **Brake** and calculate when the braking force applied exceeds 50%. 
+In this method, we will listen for data packets with the parameter **Brake** and calculate when the braking force applied exceeds 50%. 
 
-Create a buffer to read **Brake** parameters from the incoming stream. 
+To listen, create a buffer to read **Brake** parameters from the incoming stream. 
 
 ```python
 buffer = new_stream.parameters.create_buffer("Brake")
@@ -45,7 +59,7 @@ buffer.time_span_in_milliseconds = 100  # React to 100ms windows of data.
 def on_parameter_data_handler(data: ParameterData):
 
     df = data.to_panda_frame()  # Input data frame
-    output_df = pd.DataFrame()
+    output_df = pd.DataFrame()  
     output_df["time"] = df["time"]
 
     output_df["TAG__LapNumber"] = df["TAG__LapNumber"]
@@ -61,19 +75,19 @@ def on_parameter_data_handler(data: ParameterData):
 # React to new data received on the input topic.
 buffer.on_read += on_parameter_data_handler
 ```
-
 See complete code example in [source/main.py](source/main.py).
 
+## Deployment
+This model can run locally, but for the purpose of this example, run it in our serverless environment. To learn how to deploy services in Quix please see our [doc](https://documentation.platform.quix.ai/deploy/).
+
 ## Result
-**If persistence on your input and output topics is enabled**, the raw telemetry data and the result of the function will be persisted to the catalogue where you can view all the data together. 
+**If persistence on your input and output topics is enabled** the raw telemetry data and the result of the function will be persisted to the catalogue where you can view all the data together. 
 
 [![](doc/model-catalogue.png)](doc/model-catalogue.png "Model in data catalogue")
 
 
 [![](doc/model-parameters.png)](doc/model-parameters.png "Model parameters in parameter browser")
 
-## Deployment
-This model can run locally or in Quix serverless environment. To learn how to deploy services in Quix please see our [doc](https://documentation-40c5b57b-a938-4925-93a9-25df5a64e54f.platform.quix.ai/deploy/).
 
 ## What next
-You can build a dashboard to visualize and share the raw and processed data. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard)
+You can build a dashboard to visualize and share the raw and processed data. See [car-data-dashboard](https://github.com/quixai/car-data-dashboard) project for next steps.
