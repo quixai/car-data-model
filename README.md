@@ -59,9 +59,10 @@ buffer.time_span_in_milliseconds = 100  # React to 100ms windows of data.
 def on_parameter_data_handler(data: ParameterData):
 
     df = data.to_panda_frame()  # Input data frame
-    output_df = pd.DataFrame()  
-    output_df["time"] = df["time"]
-
+    output_df = pd.DataFrame() # Create new data frame for function outputs. 
+    output_df["time"] = df["time"] # Copy time column from input to output frame.
+  
+    # Copy lap number column to output as well.
     output_df["TAG__LapNumber"] = df["TAG__LapNumber"]
     print(df)
 
