@@ -1,8 +1,11 @@
 # Example model
+
+## Introduction
 This is an example of how to build a simple in-memory model that will continuously process live data. The model will contain a function to identify when the pressure applied to the brake system exceeds 50% max. 
 
 We will use the Quix SDK and deploy the model using a pub/sub pattern on Kafka. The model will read data from a Kafka topic containing raw data, and write the output of the function to a new Kafka topic.
 
+## Architecture
 We'll create the following architecture:
  
 [![](doc/car-demo-model.svg)](doc/car-demo-model.svg "Architecture") 
