@@ -82,7 +82,7 @@ buffer.on_read += on_parameter_data_handler
 See complete code example in [source/main.py](source/main.py).
 
 ## Deployment
-This model can run locally, but for the purpose of this example, run it in our serverless environment. To learn how to deploy services in Quix please see our [doc](https://documentation.platform.quix.ai/quix-main/demo-quix-docs/how-to/manage-deployments/create-deployment.html).
+This model can run locally, but for the purpose of this example, run it in our serverless environment. To learn how to deploy services in Quix please see our [doc](https://quix.ai/docs/guides/how-to/manage-deployments/create-deployment.html).
 
 ## Result
 **If persistence on your input and output topics is enabled** the raw telemetry data and the result of the function will be persisted to the catalogue where you can view all the data together. 
